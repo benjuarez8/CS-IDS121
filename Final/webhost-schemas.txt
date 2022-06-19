@@ -1,0 +1,73 @@
+CS 121 Final 
+
+Example:
+
+foo(_a_, b, c)
+ * b is also a candidate key
+ * c is a foreign key to bar.c
+
+Where _a_ indicates that a is a primary key
+
+------------------------------------------------------------------------------
+
+-- [Problem 1.2]
+
+
+servers(_hostname_, server_type)
+ * note that servers allows for the enforcement of unique hostnames 
+
+accounts(_username_, website_url, acct_type)
+ * note that accounts allows for enforcement of unique usernames
+ * website_url is a candidate key (as denoted by italics in E-R diagram)
+
+software_pkgs(_pkg_name_, _version_, description, monthly_price)
+
+dedicated_servers(_hostname_, operating_system, site_capacity, server_type)
+ * note that dedicated_servers now includes all of the attributes from the 
+   servers superclass (from E-R) which was a design choice made in order to
+   allow greater usage/efficiency with dedicated servers
+ * hostname is a foreign key to servers.hostname
+
+shared_servers(_hostname_, operating_system, site_capacity, server_type)
+ * note that dedicated_servers now includes all of the attributes from the 
+   servers superclass (from E-R) which was a design choice made in order to
+   allow for greater usage/efficiency with dedicated servers directly
+ * hostname is a foreign key to servers.hostname
+
+preferred_accts(_username_, email, website_url, created_acct, sub_price, 
+acct_type, hostname)
+ * note that preferred_accts now includes all of the attributes from the 
+   accounts superclass (from E-R) which was a design choice made in order
+   to allow for greater usage/efficiency with preferred accounts directly
+ * private_hostings was efficiently combined into this schema since its 
+   primary key would be username (or hostname) as we know that each
+   preferred account is associated with exactly one hostname (& vice versa)
+ * hostname is also a candidate key
+ * website_url is also a candidate key
+ * hostname is a foreign key to dedicated_servers.hostname
+ * username is a foreign key to accounts.username
+
+basic_accts(_username_, email, website_url, created_acct, sub_price, 
+acct_type, hostname)
+ * note that basic_accts now includes all of the attributes from the 
+   accounts superclass (from E-R) which was a design choice made in order
+   to allow for greater usage/efficiency with basic accounts directly
+ * public_hostings was efficiently combined into this schema since its
+   primary key would be username anyways, as we know that each basic 
+   account is associated with exactly one hostname
+ * website_url is also a candidate key
+ * hostname is a foreign key to shared_servers.hostname
+ * username is a foreign key to accounts.username
+
+pkg_installations(_hostname_, _pkg_name_, _version_)
+ * hostname is a foreign key to servers.hostname
+ * (pkg_name, version) is a foreign key to 
+   (software_pkgs.pkg_name, software_pkgs.version)
+
+customer_pkgs(_username_, _pkg_name_, _version_)
+ * username is a foreign key to accounts.username
+ * (pkg_name, version) is a foreign key to 
+   (software_pkgs.pkg_name, software_pkgs.version)
+
+
+
